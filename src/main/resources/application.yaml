@@ -1,0 +1,26 @@
+server:
+  port: 9999
+
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  profiles:
+    active: local
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+notify:
+  url: 127.0.0.1:8888/messages
+  emailurl: 127.0.0.1:8888/email
+
+fakeAuth: true
+
+sentry:
+  dsn: https://41b4f71382434a5fa07b878669eb9f38@o428088.ingest.sentry.io/5373066
+  flag: false

@@ -1,0 +1,13 @@
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  data:
+    mongodb:
+      host: 127.0.0.1
+      port: 27017
+      database: demo
+      authentication-database: admin
+      username: root
+      password: qaq123
+      authMechanism: SCRAM-SHA-1
