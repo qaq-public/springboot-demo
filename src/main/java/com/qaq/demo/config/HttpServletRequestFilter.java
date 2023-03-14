@@ -18,11 +18,12 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.qaq.demo.utils.HttpContextUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+
+import com.qaq.base.utils.HttpContextUtils;
 
 /***
  * HttpServletRequest 过滤器

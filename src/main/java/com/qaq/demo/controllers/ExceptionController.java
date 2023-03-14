@@ -1,9 +1,11 @@
 package com.qaq.demo.controllers;
 
-import com.qaq.demo.auth.exception.UnAuthorizedException;
-import com.qaq.demo.utils.ApiResponse;
-import io.sentry.Sentry;
-import lombok.extern.slf4j.Slf4j;
+import static com.qaq.base.utils.HttpContextUtils.getBodyString;
+
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -12,11 +14,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.servlet.http.HttpServletRequest;
+import com.qaq.base.response.ApiResponse;
+import com.qaq.demo.auth.exception.UnAuthorizedException;
 
-import java.util.stream.Collectors;
-
-import static com.qaq.demo.utils.HttpContextUtils.getBodyString;
+import io.sentry.Sentry;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
@@ -31,7 +33,7 @@ public class ExceptionController {
     @ExceptionHandler(UnAuthorizedException.class)
     public ApiResponse<Object> errorMessageResponse(UnAuthorizedException ex) {
         log.error(ex.toString());
-        return new ApiResponse<>(false, null, ex.getMessage());
+        return new ApiResponse<>(false, 0, ex.getMessage(), null);
     }
 
     @ExceptionHandler(Exception.class)
@@ -49,14 +51,15 @@ public class ExceptionController {
 
             Sentry.captureException(e);
         }
-        return ApiResponse.failureInstance(e.getMessage());
+        return new ApiResponse<>(false, -1, e.getMessage(), null);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResponse<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
-        String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(";"));
-        return new ApiResponse<>(false, null, message, 500);
+        String message = e.getBindingResult().getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(";"));
+        return new ApiResponse<>(false, 500, message, null);
     }
 
 }

@@ -1,11 +1,11 @@
 package com.qaq.demo.services;
 
-import com.qaq.demo.utils.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import com.qaq.base.response.ApiResponse;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +24,8 @@ public class NotifyService {
 
     @Async
     public ApiResponse notify(String content, String username) {
-        return httpService.exchange(messageUrl, HttpMethod.POST, new Message(content, "markdown", Arrays.asList(username)), ApiResponse.class);
+        return httpService.exchange(messageUrl, HttpMethod.POST,
+                new Message(content, "markdown", Arrays.asList(username)), ApiResponse.class);
 
     }
 
